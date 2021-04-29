@@ -3,6 +3,8 @@
 use App\Http\Controllers\FormationController;
 use App\Http\Controllers\MainController;
 use App\Http\Controllers\ProduitController;
+use App\Mail\AjoutProduit;
+use App\Models\Produit;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -34,5 +36,9 @@ Route::get('/dashboard', function () {
 })->middleware(['auth'])->name('dashboard');
 
 Route::get('export', [ProduitController::class, 'export'])->name('export');
+
+Route::get('test-mail', function () {
+    return new AjoutProduit(Produit::orderByDesc('id')->first());
+});
 
 require __DIR__.'/auth.php';

@@ -4,8 +4,11 @@ namespace App\Http\Controllers;
 
 use App\Exports\ProduitsExport;
 use App\Http\Requests\ProduitFormRequest;
+use App\Mail\AjoutProduit;
 use App\Models\Category;
 use App\Models\Produit;
+use App\Models\User;
+use Illuminate\Support\Facades\Mail;
 use Maatwebsite\Excel\Facades\Excel;
 
 class ProduitController extends Controller
@@ -62,6 +65,9 @@ class ProduitController extends Controller
             'description' => $request->description,
             'image' => $imageName,
         ]);
+
+        $user = User::first();
+        Mail::to($user)->send(new AjoutProduit($produit));
 
         return redirect()->route('produits.show', $produit)->with('statut', 'Votre nouveau produit a été bien ajouté !');
     }
