@@ -16,9 +16,10 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', [MainController::class, 'accueil'])->middleware(['auth', 'isAdmin'])->name('accueil');
+Route::get('/', [MainController::class, 'accueil'])->name('accueil');
 
-Route::get('index', [FormationController::class, 'index']);
+Route::resource('produits', ProduitController::class);
+
 Route::get('ajouter-produit', [FormationController::class, 'ajouterProduit']);
 Route::get('ajouter-produit-2', [FormationController::class, 'ajouterProduit2']);
 
@@ -28,10 +29,10 @@ Route::get('update-produit-2/{produit}', [FormationController::class, 'updatePro
 
 Route::get('suppression-produit', [FormationController::class, 'suppressionProduit']);
 
-Route::resource('produits', ProduitController::class);
-
 Route::get('/dashboard', function () {
     return view('dashboard');
 })->middleware(['auth'])->name('dashboard');
+
+Route::get('export', [ProduitController::class, 'export'])->name('export');
 
 require __DIR__.'/auth.php';

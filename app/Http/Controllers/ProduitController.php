@@ -2,12 +2,19 @@
 
 namespace App\Http\Controllers;
 
+use App\Exports\ProduitsExport;
 use App\Http\Requests\ProduitFormRequest;
 use App\Models\Category;
 use App\Models\Produit;
+use Maatwebsite\Excel\Facades\Excel;
 
 class ProduitController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware(['auth', 'isAdmin'])->except(['index', 'show']);
+    }
+
     /**
      * Display a listing of the resource.
      *
@@ -115,5 +122,10 @@ class ProduitController extends Controller
         Produit::destroy($id);
 
         return redirect()->route('produits.index')->with('statut', 'votre produit a bien été supprimé !');
+    }
+
+    public function export()
+    {
+        return Excel::download(new ProduitsExport(), 'produits.xlsx');
     }
 }
